@@ -1,0 +1,3524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Melhor que nos Livros</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Pinyon+Script&family=Marcellus&family=Jost:wght@200;300;400&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════ RESET ═══════════════════════ */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    /* ═══════════════════════ VARIABLES ═══════════════════════ */
+    :root {
+      --cream: #fdf4e7;
+      --cream-dark: #f5e8d0;
+      --parchment: #ede0c4;
+      --ink: #1a0f08;
+      --ink-soft: #3d2416;
+      --ink-faint: #7a5a42;
+      --rose: #a0403a;
+      --rose-mid: #c06860;
+      --rose-light: #d9928c;
+      --rose-blush: #f0d5d2;
+      --gold: #a07830;
+      --gold-light: #c9a660;
+      --gold-pale: #e8d5a8;
+      --shadow: rgba(26, 15, 8, 0.18);
+    }
+
+    /* ═══════════════════════ BODY / BG ═══════════════════════ */
+    body {
+      background: #1a0c06;
+      min-height: 100dvh;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      touch-action: pan-y;
+    }
+
+    /* Deep background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, #2a1208 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, #160800 0%, transparent 60%),
+        #120800;
+      z-index: 0;
+    }
+
+    /* ═══════════════════════ WRAPPER ═══════════════════════ */
+    #app {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ═══════════════════════ DECORATIVE PETALS ═══════════════════════ */
+    .petal-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      font-size: 12px;
+      color: var(--rose-light);
+      opacity: 0.12;
+      animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.12;
+      }
+
+      90% {
+        opacity: 0.08;
+      }
+
+      100% {
+        transform: translateY(110dvh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ═══════════════════════ BOOK PAGES ═══════════════════════ */
+    .page-card {
+      width: min(420px, 96vw);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* ═══════════════════════ COVER ═══════════════════════ */
+    #cover {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 48px 24px 80px;
+      overflow: hidden;
+    }
+
+    #cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 100% 70% at 50% 0%, rgba(160, 64, 58, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(160, 120, 48, 0.1) 0%, transparent 60%);
+    }
+
+    .cover-ornament-top {
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      opacity: 0.7;
+      margin-bottom: 32px;
+      animation: fadeUp 1.2s ease both;
+    }
+
+    /* Mobile polaroid grid on cover */
+    .cover-polars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 200px;
+      margin: 0 auto 32px;
+      animation: fadeUp 1.2s ease 0.15s both;
+    }
+
+    .cover-polar {
+      background: #fffdf8;
+      padding: 6px 6px 20px;
+      box-shadow: 3px 5px 18px rgba(0, 0, 0, 0.6), 0 1px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .cover-polar::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 14px;
+      background: rgba(201, 166, 96, 0.4);
+      border-radius: 1px;
+    }
+
+    .cover-polar:nth-child(1) {
+      transform: rotate(-4deg);
+    }
+
+    .cover-polar:nth-child(2) {
+      transform: rotate(3deg) translateY(5px);
+    }
+
+    .cover-polar:nth-child(3) {
+      transform: rotate(2deg) translateY(-3px);
+    }
+
+    .cover-polar:nth-child(4) {
+      transform: rotate(-2.5deg);
+    }
+
+   .cover-polar .cp-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #2a1a10;
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+    .cover-polar .cp-img img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: none;
+}
+
+    .cover-polar .cp-cap {
+      position: absolute;
+      bottom: 3px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Pinyon Script', cursive;
+      font-size: 11px;
+      color: #9a7a5a;
+    }
+
+    .cp-ph {
+      opacity: 0.2;
+    }
+
+    .cover-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      opacity: 0.8;
+      margin-bottom: 16px;
+      animation: fadeUp 1.2s ease 0.3s both;
+    }
+
+    .cover-title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(32px, 9vw, 48px);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.1;
+      text-align: center;
+      margin-bottom: 6px;
+      animation: fadeUp 1.2s ease 0.4s both;
+    }
+
+    .cover-script {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(38px, 11vw, 56px);
+      color: var(--rose-mid);
+      line-height: 1;
+      text-align: center;
+      margin-bottom: 24px;
+      animation: fadeUp 1.2s ease 0.5s both;
+    }
+
+    .cover-rule {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 18px;
+      animation: fadeUp 1.2s ease 0.55s both;
+    }
+
+    .cover-byline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--gold-pale);
+      opacity: 0.7;
+      text-align: center;
+      margin-bottom: 24px;
+      animation: fadeUp 1.2s ease 0.6s both;
+    }
+
+    .cover-epigraph {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: rgba(253, 244, 231, 0.4);
+      line-height: 2;
+      text-align: center;
+      max-width: 240px;
+      border-top: 1px solid rgba(160, 120, 48, 0.25);
+      padding-top: 18px;
+      animation: fadeUp 1.2s ease 0.7s both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cover-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: fadeUp 1.5s ease 1.2s both;
+      cursor: pointer;
+    }
+
+    .cover-scroll-hint span {
+      font-family: 'Jost', sans-serif;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(201, 166, 96, 0.45);
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, rgba(201, 166, 96, 0.5), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        transform: scaleY(1);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: scaleY(1.3);
+        opacity: 1;
+      }
+    }
+
+    /* ═══════════════════════ CHAPTER SECTION ═══════════════════════ */
+    .chapter-section {
+      width: 100%;
+      padding: 0 12px 0;
+      margin-bottom: 0;
+    }
+
+    /* Page-like card */
+    .book-page {
+      width: min(420px, 96vw);
+      margin: 0 auto;
+      background: var(--cream);
+      position: relative;
+      padding: 36px 28px 48px;
+      min-height: 520px;
+
+      /* aged paper edges */
+      border-radius: 2px;
+      box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.4),
+        0 12px 40px rgba(0, 0, 0, 0.6),
+        inset 0 0 80px rgba(160, 120, 48, 0.04);
+    }
+
+    /* Top binding strip */
+    .book-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -2px;
+      right: -2px;
+      height: 4px;
+      background: linear-gradient(90deg, #5c3a18, #8b6030, #5c3a18);
+      border-radius: 2px 2px 0 0;
+    }
+
+    /* Left margin line */
+    .book-page::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 44px;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(160, 80, 70, 0.12) 10%, rgba(160, 80, 70, 0.12) 90%, transparent);
+    }
+
+    /* Page gap between spreads */
+    .page-gap {
+      height: 24px;
+      width: min(420px, 96vw);
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.3) 100%);
+      position: relative;
+    }
+
+    .page-gap::before,
+    .page-gap::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 8px;
+    }
+
+    .page-gap::before {
+      top: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent);
+    }
+
+    .page-gap::after {
+      bottom: 0;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.4), transparent);
+    }
+
+    /* ═══════ TYPOGRAPHY ═══════ */
+    .running-head {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(61, 36, 22, 0.3);
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(61, 36, 22, 0.08);
+      padding-left: 44px;
+      /* clear margin line */
+    }
+
+    .chapter-num {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(52px, 14vw, 72px);
+      color: var(--rose-light);
+      opacity: 0.2;
+      line-height: 0.85;
+      display: block;
+      margin-bottom: -6px;
+      padding-left: 44px;
+    }
+
+    .chapter-tag {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 9px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      padding-left: 44px;
+    }
+
+    .chapter-title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(17px, 4.5vw, 22px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      padding-left: 44px;
+      border-bottom: 1px solid rgba(160, 120, 48, 0.2);
+    }
+
+    .year-mark {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(36px, 10vw, 52px);
+      font-weight: 400;
+      color: var(--rose-light);
+      opacity: 0.18;
+      line-height: 1;
+      display: block;
+      margin-bottom: 4px;
+      padding-left: 44px;
+    }
+
+    .body-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(15px, 4vw, 18px);
+      color: var(--ink-soft);
+      line-height: 1.9;
+      padding-left: 44px;
+    }
+
+    .body-text p {
+      margin-bottom: 12px;
+    }
+
+    .body-text p:first-child::first-letter {
+      font-family: 'Marcellus', serif;
+      font-size: 3.4em;
+      font-weight: 400;
+      color: var(--rose);
+      float: left;
+      line-height: 0.76;
+      margin: 8px 10px 0 0;
+    }
+
+    .pull-quote {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(22px, 6vw, 30px);
+      color: var(--rose);
+      text-align: center;
+      line-height: 1.5;
+      margin: 20px 0;
+      padding: 12px 16px;
+      border-top: 1px solid rgba(160, 120, 48, 0.2);
+      border-bottom: 1px solid rgba(160, 120, 48, 0.2);
+    }
+
+    .dialogue {
+      font-style: italic;
+      color: var(--ink);
+      padding: 10px 14px;
+      margin: 14px 0 14px 44px;
+      border-left: 2px solid var(--rose-light);
+      font-size: clamp(14px, 3.5vw, 17px);
+      background: rgba(160, 64, 58, 0.03);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .pov {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--rose);
+      background: rgba(160, 64, 58, 0.07);
+      border: 1px solid rgba(160, 64, 58, 0.18);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      margin-left: 44px;
+    }
+
+    .rule {
+      text-align: center;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 8px;
+      margin: 16px 0;
+      opacity: 0.5;
+    }
+
+    .ornament {
+      text-align: center;
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 8px;
+      margin: 18px 0 4px;
+      opacity: 0.5;
+    }
+
+    .pg-num {
+      position: absolute;
+      bottom: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      color: rgba(61, 36, 22, 0.3);
+      font-style: italic;
+    }
+
+    .pg-left .pg-num {
+      left: 28px;
+    }
+
+    .pg-right .pg-num {
+      right: 28px;
+    }
+
+    /* ═══════ POLAROIDS ═══════ */
+    .polaroid-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 18px 0;
+    }
+
+    .polaroid {
+      background: #fffdf8;
+      padding: 7px 7px 24px;
+      box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.25), 0 1px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: inline-block;
+    }
+
+    .polaroid::before {
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 34px;
+      height: 16px;
+      background: rgba(201, 166, 96, 0.4);
+      border-radius: 1px;
+    }
+
+    .polaroid .p-cap {
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Pinyon Script', cursive;
+      font-size: 14px;
+      color: #7a6050;
+    }
+
+    .polaroid.sm {
+      width: 96px;
+    }
+
+    .polaroid.sm .photo-img {
+      width: 82px;
+      height: 82px;
+    }
+
+    .polaroid.md {
+      width: 120px;
+    }
+
+    .polaroid.md .photo-img {
+      width: 106px;
+      height: 106px;
+    }
+
+    .polaroid.lg {
+      width: 140px;
+    }
+
+    .polaroid.lg .photo-img {
+      width: 126px;
+      height: 126px;
+    }
+
+    .photo-img {
+      background: #e0d0c0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: none;
+      /* mantém hidden até carregar */
+    }
+
+    .back-polar .bp-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .cover-polar .cp-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: none;
+    }
+
+    .ph-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ph-img svg {
+      opacity: 0.2;
+    }
+
+    .tl {
+      transform: rotate(-4deg);
+    }
+
+    .tr {
+      transform: rotate(3.5deg);
+    }
+
+    .ts {
+      transform: rotate(-1.5deg);
+    }
+
+    .double-polar {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+
+    /* ═══════ COVER PAGE RIGHT SIDE (final spread) ═══════ */
+    .book-page.dark {
+      background: linear-gradient(160deg, #1a0907 0%, #2c1510 55%, #1a0907 100%);
+    }
+
+    .book-page.dark::after {
+      display: none;
+    }
+
+    .book-page.dark .final-script {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(30px, 8vw, 42px);
+      color: var(--rose-light);
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .book-page.dark .final-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 3.5vw, 17px);
+      color: rgba(253, 244, 231, 0.55);
+      line-height: 2.1;
+      text-align: center;
+    }
+
+    .book-page.dark .final-hearts {
+      font-size: 18px;
+      letter-spacing: 12px;
+      color: var(--rose-light);
+      animation: hbeat 2.2s ease infinite;
+      text-align: center;
+    }
+
+    @keyframes hbeat {
+
+      0%,
+      100% {
+        opacity: .5
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.12)
+      }
+    }
+
+    .final-rule {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 166, 96, 0.4), transparent);
+      margin: 16px auto;
+    }
+
+    .book-page.dark .final-label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      font-size: 8px;
+      letter-spacing: 3px;
+      color: rgba(253, 244, 231, 0.2);
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    /* back cover polaroid */
+    .back-polar {
+      background: #fffdf8;
+      padding: 8px 8px 26px;
+      box-shadow: 3px 5px 20px rgba(0, 0, 0, 0.7);
+      transform: rotate(-2deg);
+      position: relative;
+      display: inline-block;
+    }
+
+    .back-polar::before {
+      content: '';
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 16px;
+      background: rgba(201, 166, 96, 0.35);
+      border-radius: 1px;
+    }
+
+    .back-polar .bp-img {
+      width: 130px;
+      height: 130px;
+      background: #2a1810;
+      overflow: hidden;
+    }
+
+    .back-polar .bp-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .back-polar .bp-cap {
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Pinyon Script', cursive;
+      font-size: 14px;
+      color: #9a7a5a;
+    }
+
+    .back-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(253, 244, 231, 0.4);
+      line-height: 2;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    /* ═══════ NAVIGATION ═══════ */
+    #nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px 24px;
+      gap: 12px;
+      background: linear-gradient(to top, rgba(18, 8, 0, 0.95) 0%, rgba(18, 8, 0, 0.7) 60%, transparent 100%);
+      backdrop-filter: blur(2px);
+    }
+
+    .btn-page {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 166, 96, 0.35);
+      background: rgba(18, 8, 0, 0.8);
+      color: var(--gold-light);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .btn-page:hover,
+    .btn-page:active {
+      background: rgba(160, 120, 48, 0.2);
+      border-color: var(--gold);
+      transform: scale(1.08);
+    }
+
+    .btn-page:disabled {
+      opacity: 0.2;
+      cursor: default;
+      transform: none;
+    }
+
+    .nav-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 200px;
+    }
+
+    .nav-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(201, 166, 96, 0.3);
+      border: 1px solid rgba(201, 166, 96, 0.35);
+      cursor: pointer;
+      transition: all 0.3s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-dot.active {
+      background: var(--gold);
+      transform: scale(1.5);
+    }
+
+    /* ═══════ SWIPE HINT ═══════ */
+    #swipe-hint {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Jost', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(201, 166, 96, 0.45);
+      z-index: 200;
+      animation: fadeHint 3.5s ease 2s both;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @keyframes fadeHint {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(6px);
+      }
+
+      15% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* ═══════ SPREAD SYSTEM ═══════ */
+    .spread-wrapper {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 80px;
+    }
+
+    .spread-wrapper.active {
+      display: flex;
+    }
+
+    /* Page flip animation */
+    @keyframes pageIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes pageInReverse {
+      from {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .spread-wrapper.anim-in .book-page {
+      animation: pageIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    .spread-wrapper.anim-rev .book-page {
+      animation: pageInReverse 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+
+    /* ═══════ MÚSICA BUTTON ═══════ */
+    #music-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 300;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(18, 8, 0, 0.85);
+      border: 1px solid rgba(201, 166, 96, 0.4);
+      color: var(--gold-light);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #music-btn:hover {
+      background: rgba(160, 120, 48, 0.2);
+      border-color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    #music-btn.playing {
+      border-color: var(--rose-mid);
+      color: var(--rose-mid);
+      animation: musicPulse 2s ease infinite;
+    }
+
+    @keyframes musicPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(192, 104, 96, 0.3)
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(192, 104, 96, 0)
+      }
+    }
+
+    #music-label {
+      position: fixed;
+      top: 22px;
+      right: 64px;
+      z-index: 299;
+      font-family: 'Jost', sans-serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(201, 166, 96, 0.5);
+      pointer-events: none;
+      white-space: nowrap;
+      animation: fadeHint 5s ease 3s both;
+    }
+
+    /* ═══════ SECRET LETTER MODAL ═══════ */
+    .secret-heart {
+      display: inline-block;
+      cursor: pointer;
+      color: var(--rose-light);
+      font-size: 16px;
+      opacity: 0.55;
+      transition: all 0.25s;
+      margin: 0 3px;
+      vertical-align: middle;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .secret-heart:hover,
+    .secret-heart:active {
+      opacity: 1;
+      transform: scale(1.3);
+    }
+
+    #secret-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 4, 0, 0.92);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      backdrop-filter: blur(6px);
+    }
+
+    #secret-overlay.open {
+      display: flex;
+    }
+
+    #secret-modal {
+      background: linear-gradient(160deg, #1f0d07, #2e1710);
+      border: 1px solid rgba(201, 166, 96, 0.25);
+      border-radius: 4px;
+      padding: 40px 32px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.8);
+      animation: modalIn 0.35s ease both;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    #secret-modal .sm-ornament {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 48px;
+      color: var(--rose-light);
+      opacity: 0.35;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    #secret-modal .sm-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--cream);
+      line-height: 2;
+      opacity: 0.85;
+    }
+
+    #secret-modal .sm-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: rgba(201, 166, 96, 0.4);
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #secret-modal .sm-close:hover {
+      color: var(--gold);
+    }
+
+    #secret-modal .sm-rule {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 166, 96, 0.3), transparent);
+      margin: 20px auto 0;
+    }
+
+    /* ═══════ DEDICATION PAGE ═══════ */
+    .dedication-page {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .ded-ornament {
+      font-size: 11px;
+      letter-spacing: 6px;
+      color: var(--ink-faint);
+      opacity: 0.8;
+      font-family: 'Jost', sans-serif;
+      font-weight: 200;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    .ded-script {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(52px, 14vw, 72px);
+      color: var(--rose);
+      opacity: 0.15;
+      line-height: 0.85;
+      margin-bottom: -10px;
+    }
+
+    .ded-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 5vw, 24px);
+      color: var(--ink);
+      line-height: 1.9;
+      max-width: 300px;
+      opacity: 1;
+    }
+
+    .ded-rule {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ink-faint), transparent);
+      opacity: 0.4;
+      margin: 28px auto;
+    }
+
+    .ded-sub {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #3d2416;
+    }
+
+    /* ═══════ MEMORIES PAGE ═══════ */
+    .memories-page .book-page {
+      background: var(--cream);
+    }
+
+    .memories-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(13px, 3.5vw, 16px);
+      color: var(--ink-faint);
+      line-height: 2;
+      padding-left: 44px;
+      margin-bottom: 16px;
+      opacity: 0.75;
+    }
+
+    .memory-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0 8px 44px;
+      border-bottom: 1px solid rgba(160, 120, 48, 0.08);
+    }
+
+    .memory-item:last-child {
+      border-bottom: none;
+    }
+
+    .memory-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--rose-light);
+      opacity: 0.5;
+      flex-shrink: 0;
+      margin-top: 10px;
+    }
+
+    .memory-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(14px, 3.8vw, 17px);
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* ═══════ QR CODE PAGE ═══════ */
+    .qr-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      min-height: 400px;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .qr-title {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(15px, 4vw, 18px);
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .qr-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--ink-faint);
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .qr-box {
+      background: white;
+      padding: 12px;
+      border-radius: 3px;
+      box-shadow: 2px 4px 18px rgba(0, 0, 0, 0.2);
+      margin-bottom: 16px;
+    }
+
+    .qr-caption {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 20px;
+      color: var(--rose);
+      margin-top: 8px;
+    }
+
+    /* ═══════ HIDDEN FINAL PAGE ═══════ */
+    #hidden-final {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 60px 32px;
+      text-align: center;
+      background: linear-gradient(160deg, #120600, #1f0d07, #120600);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hidden-final.revealed {
+      display: flex;
+    }
+
+    #hidden-final::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(160, 64, 58, 0.1), transparent);
+      pointer-events: none;
+    }
+
+    .hf-trigger {
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      font-size: 8px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(201, 166, 96, 0.18);
+      margin-top: 8px;
+      transition: color 0.3s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .hf-trigger:hover {
+      color: rgba(201, 166, 96, 0.4);
+    }
+
+    .hf-main {
+      font-family: 'Marcellus', serif;
+      font-size: clamp(22px, 6vw, 30px);
+      color: var(--cream);
+      line-height: 1.5;
+      opacity: 0.9;
+      margin: 0 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hf-script {
+      font-family: 'Pinyon Script', cursive;
+      font-size: clamp(40px, 11vw, 56px);
+      color: var(--rose-mid);
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 24px;
+    }
+
+    .hf-rule {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 166, 96, 0.4), transparent);
+      margin: 0 auto 20px;
+    }
+
+    .hf-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 3.8vw, 17px);
+      color: rgba(253, 244, 231, 0.55);
+      line-height: 2.1;
+      max-width: 280px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hf-hearts {
+      font-size: 20px;
+      letter-spacing: 14px;
+      color: var(--rose-light);
+      animation: hbeat 2.2s ease infinite;
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════ READING SECTION TAG ═══════ */
+    .section-divider {
+      width: min(420px, 96vw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 0;
+      gap: 10px;
+      color: rgba(201, 166, 96, 0.35);
+      font-size: 10px;
+      letter-spacing: 4px;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201, 166, 96, 0.2));
+    }
+
+    .section-divider::after {
+      background: linear-gradient(270deg, transparent, rgba(201, 166, 96, 0.2));
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ BOTÃO DE MÚSICA ══ -->
+  <button id="music-btn" title="tocar nossa música" onclick="toggleMusic()">♪</button>
+  <span id="music-label">nossa música</span>
+  <audio id="bg-music" loop>
+    <!-- "Os que olham para Ti" - FHOP -->
+    <source src="https://www.youtube.com/watch?v=dQw4w9WgXcQ" type="audio/mpeg">
+  </audio>
+
+  <!-- ══ CARTAS ESCONDIDAS — MODAL ══ -->
+  <div id="secret-overlay" onclick="closeSecret(event)">
+    <div id="secret-modal">
+      <button class="sm-close" onclick="closeSecretBtn()">✕</button>
+      <div class="sm-ornament">♡</div>
+      <p class="sm-text" id="secret-text">você é especial.</p>
+      <div class="sm-rule"></div>
+    </div>
+  </div>
+
+  <!-- ══ PÁGINA FINAL ESCONDIDA ══ -->
+  <div id="hidden-final">
+    <p
+      style="font-family:'Jost',sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:rgba(201,166,96,0.3);margin-bottom:40px;">
+      ✦ obrigado ✦</p>
+    <p class="hf-main">Obrigado<br>por existir na<br>minha história.</p>
+    <div class="hf-rule"></div>
+    <p class="hf-script">te amo.</p>
+    <div class="hf-rule"></div>
+    <p class="hf-body">
+      Esse livro acabou.<br>
+      Mas a história que a gente vai escrever<br>
+      ainda nem começou de verdade.
+    </p>
+    <div class="hf-hearts">♥ ♥ ♥</div>
+    <p
+      style="font-family:'Jost',sans-serif;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,244,231,0.12);margin-top:40px;">
+      Melhor que nos Livros</p>
+  </div>
+
+  <!-- Petal ambiance -->
+  <div class="petal-bg" id="petalBg"></div>
+
+  <div id="app">
+
+    <!-- ══════════════════════════════
+     SPREAD 0 — CAPA
+══════════════════════════════ -->
+    <div class="spread-wrapper active" id="spread-0">
+      <section id="cover">
+        <p class="cover-ornament-top">✦ uma história real ✦</p>
+
+        <!-- Polaroids na capa -->
+        <div class="cover-polars">
+          <div class="cover-polar">
+            <div class="cp-img">
+              <img src="fotos/foto1.jpg" alt="foto 1" onerror="this.style.display='none'"
+                onload="this.style.display='block'">
+              <svg class="cp-ph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M3 18l4-4 3 3 4-5 7 6" />
+              </svg>
+            </div>
+            <span class="cp-cap">primeira foto ♡</span>
+          </div>
+          <div class="cover-polar">
+            <div class="cp-img">
+              <img src="fotos/foto2.JPG" alt="foto 2" onerror="this.style.display='none'">
+              <svg class="cp-ph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M3 18l4-4 3 3 4-5 7 6" />
+              </svg>
+            </div>
+            <span class="cp-cap">nós ♡</span>
+          </div>
+          <div class="cover-polar">
+            <div class="cp-img">
+              <img src="fotos/foto28.jpg" alt="foto 3" onerror="this.style.display='none'" onload="this.style.display='block'">
+              <svg class="cp-ph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M3 18l4-4 3 3 4-5 7 6" />
+              </svg>
+            </div>
+            <span class="cp-cap">sempre ♡</span>
+          </div>
+          <div class="cover-polar">
+            <div class="cp-img">
+              <img src="fotos/foto4.PNG" alt="foto 4" onerror="this.style.display='none'" onload="this.style.display='block'">
+              <svg class="cp-ph" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                stroke-width="1">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="12" cy="10" r="3" />
+                <path d="M3 18l4-4 3 3 4-5 7 6" />
+              </svg>
+            </div>
+            <span class="cp-cap">♡</span>
+          </div>
+        </div>
+
+        <p class="cover-label">Gabriel &amp; Ana</p>
+        <h1 class="cover-title">Melhor que nos</h1>
+        <h2 class="cover-script">Livros</h2>
+        <div class="cover-rule"></div>
+        <p class="cover-byline">uma história de amor verdadeiro e de como Jesus é bom em nossas vidas</p>
+        <p class="cover-epigraph">
+          Eclesiastes 3:1
+        </p>
+
+        <div class="cover-scroll-hint" onclick="document.getElementById('btn-next').click()">
+          <span>virar página</span>
+          <div class="scroll-arrow"></div>
+        </div>
+      </section>
+    </div>
+
+
+    <!-- ══════════════════════════════
+     SPREAD DEDICATÓRIA
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-ded">
+      <div class="chapter-section">
+        <div class="book-page"
+          style="display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:520px;padding:48px 28px;text-align:center;background:linear-gradient(160deg,#fdf4e7,#f5e8d0);">
+          <p class="ded-ornament">dedicatória</p>
+          <div class="ded-rule"></div>
+          <p class="ded-main">
+            Ana,<br>
+            isso tudo é pra ti<br>
+            tu mora no meu coração<br>
+            eu te amo!
+          </p>
+          <div class="ded-rule"></div>
+          <p class="ded-sub">com amor, Gabriel</p>
+          <!-- carta escondida -->
+          <p class="ded-secret"
+            style="color: #3d2416; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:12px;">
+            clica aqui quando precisar lembrar <span class="secret-heart"
+              onclick="openSecret('Obrigado por tudo, tu não tem noção o quão especial tu é pra mim.')">♡</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════
+     SPREAD MEMÓRIAS
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-mem">
+
+      <div class="chapter-section memories-page">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num" style="opacity:0.15">Lembranças</span>
+          <p class="chapter-tag">coisas que eu lembro de você</p>
+          <h2 class="chapter-title">Detalhes que só eu sei</h2>
+          <p class="memories-intro">
+            Essas coisas pequenas que talvez você nem perceba,<br>mas que pra mim sempre fizeram diferença.
+          </p>
+          <div class="memory-item">
+            <div class="memory-dot"></div>
+            <p class="memory-text">Eu lembro do teu jeito de sorrir. Daquele sorriso todo envergonhado que tu faz quando
+              te elogio.</p>
+          </div>
+          <div class="memory-item">
+            <div class="memory-dot"></div>
+            <p class="memory-text">Do teu jeito de falar. A forma como você conta as coisas, é tão bom de ouvir</p>
+          </div>
+          <span class="pg-num">i</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section memories-page">
+        <div class="book-page pg-right">
+          <p class="running-head">Coisas que eu lembro de você</p>
+          <div class="memory-item" style="margin-top:20px">
+            <div class="memory-dot"></div>
+            <p class="memory-text">Dos momentos na igreja, principalmente agora que cantamos juntos.</p>
+          </div>
+          <div class="memory-item">
+            <div class="memory-dot"></div>
+            <p class="memory-text">De cada momento que estou contigo. Eles são especiais pois do teu lado tudo fica
+              melhor.</p>
+          </div>
+          <div class="memory-item">
+            <div class="memory-dot"></div>
+            <p class="memory-text">Do teu jeito de ser, a forma que tu trata os outros, a forma que tu se empenha e se
+              dedica, me deixa impressionado.</p>
+          </div>
+          <div class="pull-quote" style="margin-top:16px">
+            dos detalhes que você nem percebe, mas que pra mim sempre fizeram diferença. <span class="secret-heart"
+              onclick="openSecret('Alguns dos detalhe que reparo em ti estão aqui, lembra do valor que tu tem.')">♡</span>
+          </div>
+          <span class="pg-num">ii</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-mem -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 1 — Cap 1: Antes de tudo
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-1">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Um</span>
+          <p class="chapter-tag">Capítulo 01</p>
+          <h2 class="chapter-title">Antes de tudo</h2>
+          <div class="body-text">
+            <p>O Gabriel nunca soube explicar exatamente quando começou. Tipo… não tem uma data específica, nem um
+              momento exato que ele consiga apontar.</p>
+            <p>Mas tem uma certeza que sempre esteve ali:</p>
+          </div>
+          <div class="pull-quote">sempre foi ela. <span class="secret-heart"
+              onclick="openSecret('Sempre foi você. Antes de você saber. Antes de qualquer coisa. Sempre.')">♡</span>
+          </div>
+          <div class="body-text">
+            <p>Lá em 2019, quando eles ainda eram só duas crianças que quase não se falavam, já tinha alguma coisa
+              diferente. Não era intenso. Não era declarado. Mas era real.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">1</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 1 — Antes de tudo</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>E o mais engraçado? Todo mundo percebia.</p>
+            <p>Menos eles.</p>
+          </div>
+
+          <!-- ══ FOTO 1 ══ -->
+          <div class="polaroid-wrap">
+            <div class="polaroid md tl">
+              <div class="photo-img">
+                <img src="fotos/foto5.JPG" alt="Nós" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg>
+                </div>
+              </div>
+              <span class="p-cap">Nós ♡</span>
+            </div>
+          </div>
+
+          <div class="rule">— ♥ —</div>
+
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Aquela época em que dois corações ainda não sabiam que já tinham se
+              encontrado.</p>
+          </div>
+          <span class="pg-num">2</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-1 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 2 — Cap 2: A distância
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-2">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="year-mark">2020</span>
+          <p class="chapter-tag">Capítulo 02</p>
+          <h2 class="chapter-title">Quando o tempo separa</h2>
+          <div class="body-text">
+            <p>Então veio 2020. E com ele, a distância. A pandemia afastou os dois sem que eles pudessem fazer nada.</p>
+            <p>Cada um seguiu sua rotina, sua vida, seus dias… e o contato simplesmente parou.</p>
+          </div>
+          <div class="pull-quote">Mas o sentimento não.</div>
+          <div class="body-text">
+            <p>Porque algumas coisas não acabam. Só ficam em pausa.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">3</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 2 — Quando o tempo separa</p>
+
+          <!-- ══ FOTO 2 ══ -->
+          <div class="polaroid-wrap" style="margin-top:20px">
+            <div class="polaroid md ts">
+              <div class="photo-img">
+                <img src="fotos/foto6.JPG" alt="2020" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg>
+                </div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div>
+
+          <div class="body-text" style="margin-top:14px">
+            <p>E foi exatamente isso que aconteceu com eles. A pausa que nenhum dos dois pediu — mas que os dois
+              precisaram aguentar.</p>
+            <p style="font-style:italic;opacity:.7">O tempo passou. O sentimento ficou.</p>
+          </div>
+          <span class="pg-num">4</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-2 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 3 — Cap 3: Eu não sabia demonstrar
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-3">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Três</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 03</p>
+          <h2 class="chapter-title">Eu não sabia demonstrar</h2>
+          <div class="body-text">
+            <p>Eu sempre senti. Isso nunca foi o problema.</p>
+            <p>O problema era mostrar.</p>
+            <p>Tipo o dia do bombom. Pra qualquer pessoa, é só um doce. Mas pra mim… era tipo um plano inteiro.</p>
+          </div>
+          <div class="dialogue">"Tu pode entregar pra ela pra mim?"</div>
+          <div class="body-text">
+            <p>Hoje eu rio disso.</p>
+            <p>Mas na época… era o máximo que eu conseguia.</p>
+          </div>
+          <span class="pg-num">5</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 3 — Eu não sabia demonstrar</p>
+
+          <!-- ══ FOTOS 3a e 3b ══ -->
+          <div class="double-polar" style="margin-top:12px">
+            <div class="polaroid sm tl">
+              <div class="photo-img">
+                <img src="fotos/foto8.jpeg" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+            <div class="polaroid sm tr">
+              <div class="photo-img">
+                <img src="fotos/foto7.JPG" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div>
+
+          <div class="body-text" style="margin-top:12px">
+            <p>Não era falta de vontade. Era medo. Medo de fazer errado. Medo de estragar algo que já era importante
+              demais.</p>
+          </div>
+          <div class="rule">— ♥ —</div>
+          <span class="pg-num">6</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-3 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 4 — Cap 4: Pequenos detalhes
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-4">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Quatro</span>
+          <p class="chapter-tag">Capítulo 04</p>
+          <h2 class="chapter-title">Pequenos detalhes</h2>
+          <div class="body-text">
+            <p>Teve também aquele dia na igreja. Ele sentou do lado dela. Pra qualquer pessoa normal, isso não significa
+              nada.</p>
+            <p>Mas pra ele? Significava tudo.</p>
+            <p>Ele começou a reparar em cada detalhe. Cada movimento. Cada gesto.</p>
+          </div>
+          <div class="pull-quote">Ele só queria sentir que existia uma conexão ali.</div>
+          <span class="pg-num">7</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 4 — Pequenos detalhes</p>
+
+          <!-- ══ FOTO 4 ══ -->
+          <div class="polaroid-wrap" style="margin: 20px 0 14px">
+            <div class="polaroid lg ts">
+              <div class="photo-img">
+                <img src="fotos/foto9.JPG" alt="juntos" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">os dois ♡</span>
+            </div>
+          </div>
+
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Era ali, nesses momentos pequenos, que tudo fazia sentido.</p>
+          </div>
+          <div class="rule">— ♥ —</div>
+          <span class="pg-num">8</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-4 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 5 — Cap 5: Quando tudo desaba
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-5">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="year-mark">2023</span>
+          <p class="chapter-tag">Capítulo 05</p>
+          <h2 class="chapter-title">Quando tudo desaba</h2>
+          <div class="body-text">
+            <p>2023 chegou… e trouxe a parte mais difícil.</p>
+            <p>Ela disse que não sentia mais aquilo. Que talvez tivesse sido mais emoção.</p>
+            <p>E aquilo quebrou ele de um jeito que ele nunca tinha sentido antes.</p>
+          </div>
+          <div class="pull-quote">Era certeza. <span class="secret-heart"
+              onclick="openSecret('Nunca foi fase. Nunca foi passageiro. Sempre foi certeza. E ainda é.')">♡</span>
+          </div>
+          <div class="body-text">
+            <p>E o pior não foi só ouvir aquilo… foi perceber que ele não podia fazer nada.</p>
+          </div>
+          <span class="pg-num">9</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 5 — Quando tudo desaba</p>
+
+          <!-- ══ FOTO 5 ══ -->
+          <div class="polaroid-wrap" style="margin: 24px 0 16px">
+            <div class="polaroid md tl">
+              <div class="photo-img">
+                <img src="fotos/foto10.JPG" alt="2023" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">nunca foi passageiro ♡</span>
+            </div>
+          </div>
+
+          <div class="body-text">
+            <p>Pra ele nunca foi só emoção. Nunca foi algo que passa.</p>
+            <p style="font-style:italic;opacity:.7">Era certeza. Sempre foi.</p>
+          </div>
+          <div class="rule">— ♥ —</div>
+          <span class="pg-num">10</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-5 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 6 — Cap 6: Eu fiquei mesmo assim
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-6">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="year-mark">2024</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 06</p>
+          <h2 class="chapter-title">Eu fiquei, mesmo assim</h2>
+          <div class="body-text">
+            <p>2024 foi… estranho. Não teve briga. Não teve fim oficial. Mas foi pior.</p>
+            <p>Ela começou a gostar de outra pessoa. E eu continuei ali. Apoiando. Agindo normal.</p>
+            <p>Mas não tava normal.</p>
+          </div>
+          <span class="pg-num">11</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 6 — Eu fiquei, mesmo assim</p>
+          <div class="body-text" style="margin-bottom:12px">
+            <p>Tinha noite que eu ficava pensando em tudo. E às vezes eu chorava. Quieto. Sem ninguém saber.</p>
+            <p>Porque eu nunca fui de falar essas coisas.</p>
+          </div>
+          <div class="pull-quote">eu sempre senti demais. <span class="secret-heart"
+              onclick="openSecret('Tinha noite que eu ficava pensando em você e não conseguia parar. Isso nunca passou.')">♡</span>
+          </div>
+
+          <!-- ══ FOTOS 6a e 6b ══ -->
+          <div class="double-polar">
+            <div class="polaroid sm tr">
+              <div class="photo-img">
+                <img src="fotos/foto12.JPG" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">eu fiquei ♡</span>
+            </div>
+            <div class="polaroid sm tl">
+              <div class="photo-img">
+                <img src="fotos/foto11.JPG" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">mesmo assim ♡</span>
+            </div>
+          </div>
+
+          <div class="body-text" style="margin-top:10px">
+            <p>E mesmo assim… eu não consegui ir embora.</p>
+          </div>
+          <span class="pg-num">12</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-6 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 7 — Cap 7 + Cap 8
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-7">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Sete</span>
+          <p class="chapter-tag">Capítulo 07</p>
+          <h2 class="chapter-title">Nada encaixava</h2>
+          <div class="body-text">
+            <p>A vida continuou. Eles conheceram outras pessoas. Tiveram outras histórias.</p>
+            <p>Mas nada parecia certo. Era como tentar encaixar algo que quase funciona… mas nunca completamente.</p>
+          </div>
+          <div class="pull-quote">Eclesiastes 3:1</div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">13</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 8 — O ponto de virada</p>
+          <span class="year-mark">2025</span>
+          <p class="chapter-tag">Capítulo 08</p>
+          <h2 class="chapter-title">O ponto de virada</h2>
+          <div class="body-text">
+            <p>2025 começou como qualquer outro ano.</p>
+            <p>Mas virou tudo.</p>
+            <p>Gabriel percebeu que podia perder ela de vez. E isso mudou tudo.</p>
+          </div>
+
+          <!-- ══ FOTO 7 ══ -->
+          <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto13.JPG" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">a virada ♡</span>
+            </div>
+          </div>
+
+          <div class="body-text" style="margin-top:10px">
+            <p>Porque dessa vez ele não quis só sentir. Ele quis mostrar.</p>
+          </div>
+          <span class="pg-num">14</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-7 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 8 — Cap 9: Eu não queria perder ela
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-8">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Nove</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 09</p>
+          <h2 class="chapter-title">Eu não queria perder ela</h2>
+          <div class="body-text">
+            <p>Eu não sei dizer exatamente quando virou a chave. Mas virou.</p>
+            <p>Eu comecei a pensar:</p>
+          </div>
+          <div class="dialogue">"E se eu perder ela de vez?"</div>
+          <div class="body-text">
+            <p>E isso me deu um medo absurdo. Então eu comecei a fazer diferente. Me aproximar mais. Conversar mais.
+              Estar mais presente.</p>
+            <p>Sem pressão. Só… sendo eu.</p>
+          </div>
+          <span class="pg-num">15</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 9 — Eu não queria perder ela</p>
+
+          <!-- ══ FOTOS 8a e 8b ══ -->
+          <div class="double-polar" style="margin-top:20px">
+            <div class="polaroid sm tl">
+              <div class="photo-img">
+                <img src="fotos/foto14.JPG" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">sendo eu ♡</span>
+            </div>
+            <div class="polaroid sm tr">
+              <div class="photo-img">
+                <img src="fotos/foto15.jpg" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">presente ♡</span>
+            </div>
+          </div>
+
+          <div class="pull-quote" style="margin-top:14px">E pela primeira vez, eu senti que tava fazendo certo.</div>
+          <div class="rule">— ♥ —</div>
+          <span class="pg-num">16</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-8 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 9 — Cap 10: A notícia
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-9">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Dez</span>
+          <p class="chapter-tag">Capítulo 10</p>
+          <h2 class="chapter-title">A notícia</h2>
+          <div class="body-text">
+            <p>E então veio algo que parecia impossível.</p>
+            <p>Ela tava pensando em voltar a gostar dele.</p>
+            <p>Por fora, Gabriel tentou se fazer de tranquilo.</p>
+            <p>Mas por dentro?</p>
+          </div>
+          <div class="pull-quote">Ele tava feliz num nível que nem dava pra explicar.</div>
+          <span class="pg-num">17</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 10 — A notícia</p>
+
+          <!-- ══ FOTO 10 ══ -->
+          <div class="polaroid-wrap" style="margin: 22px 0 16px">
+            <div class="polaroid lg ts">
+              <div class="photo-img">
+                <img src="fotos/foto3.JPG" alt="a notícia" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M3 18l4-4 3 3 4-5 7 6"/></svg></div>
+              </div>
+              <span class="p-cap">ele não parava de sorrir ♡</span>
+            </div>
+          </div>
+
+          <div class="body-text">
+            <p>Era tipo ver uma oração sendo respondida. Tipo perceber que talvez aquilo tudo não tivesse sido à toa.</p>
+            <p>Que cada espera, cada silêncio, cada lágrima escondida tinha levado até ali.</p>
+            <p style="font-style:italic;opacity:.75">A história ainda não tinha terminado. Ela só estava chegando em uma parte nova.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">18</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-9 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 10 — Cap 11: Nossas vozes
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-10">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Onze</span>
+          <p class="chapter-tag">Capítulo 11 · 19 de abril</p>
+          <h2 class="chapter-title">Nossas vozes</h2>
+          <div class="body-text">
+            <p>No dia 19 de abril, aconteceu algo que Gabriel nunca ia esquecer.</p>
+            <p>Era culto jovem. E, de alguma forma, aquele dia parecia ter sido escrito com um cuidado diferente.</p>
+            <p>Ele cantou. Ela cantou. E por alguns minutos, parecia que tudo ao redor tinha ficado menor.</p>
+            <p>A música era <em>Dono da Minha Afeição</em>, da FHOP. E quando chegou a ponte, Gabriel fez um solinho.</p>
+          </div>
+          <div class="pull-quote">Logo depois, Ana entrou cantando. E foi lindo.</div>
+          <span class="pg-num">19</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 11 — Nossas vozes</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Não só porque a música era bonita. Mas porque as vozes deles combinaram de um jeito que ele não sabia explicar.</p>
+            <p>Ela não sabia muito bem a hora de entrar. Então olhou pra ele. E Gabriel fez um sinal.</p>
+            <p>Um sinal simples. Mas que, pra ele, virou lembrança.</p>
+          </div>
+          <div class="pull-quote">Ela olhou. Ele sinalizou. Ela entrou. <span class="secret-heart" onclick="openSecret('A tua voz é linda, pra mim a mais bonita que tem')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Porque às vezes os momentos mais marcantes não são os mais ensaiados. São aqueles pequenos segundos em que tudo acontece naturalmente.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">20</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-10 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 11 — Cap 12: Um sonho no púlpito
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-11">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Doze</span>
+          <p class="chapter-tag">Capítulo 12</p>
+          <h2 class="chapter-title">Um sonho no púlpito</h2>
+          <div class="body-text">
+            <p>Depois que eles terminaram de cantar, desceram do púlpito. E o pessoal começou a falar.</p>
+            <p>Disseram que a música tinha ficado perfeita. Que as vozes tinham combinado. Que ficou lindo.</p>
+            <p>Mas Gabriel já sabia disso antes de qualquer pessoa falar. Porque ele tinha sentido.</p>
+          </div>
+          <div class="pull-quote">Não era só uma música no culto jovem. Era um sonho acontecendo na frente dele.</div>
+          <span class="pg-num">21</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 12 — Um sonho no púlpito</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Ele estava realizando o sonho de cantar. E mais do que isso: estava cantando com ela.</p>
+            <p>A voz dela deixava ele ainda mais apaixonado do que ele já era. E isso parecia impossível.</p>
+            <p>Naquele dia, eles ainda tentaram fazer uma trend. Não deu muito certo. Na verdade, deu meio errado.</p>
+          </div>
+          <div class="pull-quote">Mas do jeito deles, isso também virou memória. <span class="secret-heart" onclick="openSecret('Ana tu é a mulher dos meus sonhos! Eu oro toda noite por nós!')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Depois, eles conseguiram tirar uma foto da guitarra e do microfone. Pra qualquer pessoa era só isso. Mas pra ele? Era um pedaço daquele dia.</p>
+          </div>
+          <span class="pg-num">22</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-11 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 12 — Cap 13: Eu estava realizando um sonho
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-12">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Treze</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 13</p>
+          <h2 class="chapter-title">Eu estava realizando um sonho</h2>
+          <div class="body-text">
+            <p>Eu não sei se ela entendeu o tamanho daquele dia pra mim.</p>
+            <p>Cantar já era especial. Mas cantar com ela… era diferente.</p>
+            <p>Eu tava ali, no culto jovem, fazendo algo que eu amo. E do meu lado estava a pessoa que eu amo.</p>
+            <p>A voz dela entrou na música e parecia que tudo ficou mais bonito. Não era só técnica. Era ela.</p>
+          </div>
+          <div class="pull-quote">Quando ela me olhou sem saber a hora de entrar, eu fiz um sinal. Foi rápido. Mas eu lembro.</div>
+          <span class="pg-num">23</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 13 — Eu estava realizando um sonho</p>
+          <div class="body-text">
+            <p>Porque naquele segundo, parecia que a gente tava conectado. Como se eu soubesse o que ela precisava. E ela confiasse em mim pra entrar.</p>
+            <p>Talvez pra outra pessoa isso não fosse nada. Mas pra mim foi muito.</p>
+          </div>
+          <div class="pull-quote">Porque eu sempre sonhei com momentos assim. Momentos que não precisam ser explicados. Só vividos. <span class="secret-heart" onclick="openSecret('E naquele dia, eu vivi uma parte da história que eu sempre quis contar.')">♡</span></div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">24</span>
+        </div>
+      </div>
+          <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto16.jpeg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div>
+
+
+    </div><!-- /spread-12 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 13 — Cap 14: O livro dentro do livro
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-13">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Quatorze</span>
+          <p class="chapter-tag">Capítulo 14 · 24 de maio</p>
+          <h2 class="chapter-title">O livro dentro do livro</h2>
+          <div class="body-text">
+            <p>No dia 24 de maio, Gabriel terminou algo que já vinha crescendo dentro dele há um tempo.</p>
+            <p>Um livro. Mas não só um livro. Um livro em formato de site. Porque ele era programador.</p>
+            <p>E talvez esse fosse o jeito mais Gabriel possível de dizer o que sentia.</p>
+          </div>
+          <div class="pull-quote">Não era só código. Era a história deles.</div>
+          <span class="pg-num">25</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 14 — O livro dentro do livro</p>
+          <div class="body-text">
+            <p>Era tudo que ele sentia tentando virar alguma coisa que ela pudesse ler, ver e sentir.</p>
+            <p>E enquanto fazia, ele chorou. Chorou de emoção.</p>
+            <p>Porque parecia impossível acreditar que tudo aquilo estava acontecendo. Depois de tanto tempo. Depois de tanta espera. Depois de tanta coisa guardada.</p>
+          </div>
+          <div class="pull-quote">Ele estava fazendo um livro pra Ana. <span class="secret-heart" onclick="openSecret('E mais do que isso, eu to vivendo algo que parecia resposta de Deus.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Gabriel só conseguia pensar em como Deus tinha sido bom com ele.</p>
+          </div>
+          <span class="pg-num">26</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-13 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 14 — Cap 15: A entrega
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-14">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Quinze</span>
+          <p class="chapter-tag">Capítulo 15 · domingo, 24 de maio</p>
+          <h2 class="chapter-title">A entrega</h2>
+          <div class="body-text">
+            <p>Era domingo. Antes do culto, Gabriel terminou o livro.</p>
+            <p>Ele contou pra Ana que tinha feito algo pra ela. Que ia mandar. E ela já ficou toda feliz. Do jeito dela.</p>
+            <p>Depois do culto, ele chegou em casa, jantou, transformou o site em um link. E mandou.</p>
+          </div>
+          <div class="pull-quote">A partir dali, começou uma espera que pareceu muito maior do que realmente foi.</div>
+          <span class="pg-num">27</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 15 — A entrega</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Ela demorou uns trinta minutos pra responder. E nesses trinta minutos, Gabriel provavelmente pensou em tudo.</p>
+            <p><em>Será que ela gostou? Será que ficou demais? Será que eu exagerei?</em></p>
+            <p>Até que veio a primeira mensagem.</p>
+          </div>
+          <div class="dialogue">"GABRIEL."</div>
+          <div class="body-text">
+            <p>Quando alguém começa uma mensagem só com o seu nome em letra maiúscula, existem duas possibilidades: ou deu muito certo, ou deu muito errado.</p>
+            <p style="font-style:italic;opacity:.75">Era o contrário do que ele tinha medo. Ela não sabia como agradecer. Disse que estava perfeito. Disse que tinha se trancado no banheiro pra ver. E que chorava enquanto lia.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">28</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-14 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 15 — Cap 16: Eu te amo
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-15">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Dezesseis</span>
+          <p class="chapter-tag">Capítulo 16</p>
+          <h2 class="chapter-title">Eu te amo</h2>
+          <div class="body-text">
+            <p>Naquela conversa, Ana se abriu. Do jeito dela.</p>
+            <p>Disse que Gabriel era muito especial pra ela. Disse que não sabia como agradecer. Mas que realmente tinha amado.</p>
+            <p>Dentro do livro, Gabriel tinha colocado uma página secreta. E naquela página estava escrito:</p>
+          </div>
+          <div class="pull-quote">te amo.</div>
+          <div class="body-text">
+            <p>Ana ainda não tinha visto. Mas quando viu, algo aconteceu.</p>
+          </div>
+          <span class="pg-num">29</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 16 — Eu te amo</p>
+          <div class="dialogue">"te amo."</div>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>E Gabriel respondeu: <em>"eu te amo."</em></p>
+            <p>Foi a primeira vez em todos aqueles anos que eles disseram isso um para o outro. Depois de 2019. Depois da distância. Depois dos silêncios. Depois de tudo.</p>
+          </div>
+          <div class="pull-quote">Aquelas palavras finalmente saíram. <span class="secret-heart" onclick="openSecret('E não pareceram forçadas. Não pareceram apressadas. Pareceram certas.')">♡</span></div>
+          <div class="body-text">
+            <p>Eles falaram que eram um sonho realizado um do outro. E Ana disse algo que Gabriel nunca ia esquecer: que estava vivendo algo <em>melhor que nos livros dela</em>.</p>
+          </div>
+          <span class="pg-num">30</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-15 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 16 — Cap 17: O dia em que eu chorei junto com ela
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-16">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Dezessete</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 17</p>
+          <h2 class="chapter-title">O dia em que eu chorei junto com ela</h2>
+          <div class="body-text">
+            <p>Eu lembro de mandar o link. E lembro de esperar. Aqueles trinta minutos pareceram uma eternidade.</p>
+            <p>Porque não era qualquer coisa. Era o meu coração ali. Em forma de site. Em forma de tudo que eu nunca consegui dizer direito.</p>
+            <p>Quando ela mandou "GABRIEL", eu gelei. Achei que tinha dado errado.</p>
+          </div>
+          <div class="pull-quote">Mas aí ela começou a falar. E eu percebi que não.</div>
+          <span class="pg-num">31</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 17 — O dia em que eu chorei junto com ela</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Ela tinha entendido. Ela tinha sentido. Ela tinha amado.</p>
+            <p>E quando ela disse que se trancou no banheiro pra ver e começou a chorar, eu também chorei.</p>
+            <p>Porque pela primeira vez parecia que não era só eu carregando tudo. Era nós dois. A gente chorou junto.</p>
+          </div>
+          <div class="pull-quote">E quando ela achou a página secreta… quando ela disse "te amo"… <span class="secret-heart" onclick="openSecret('uma parte minha que esperou anos por aquilo finalmente respirou.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Foi 2019. Foi 2020. Foi 2023. Foi 2024. Foi cada medo, cada silêncio, cada oração. Tudo cabia naquelas três palavras.</p>
+          </div>
+          <span class="pg-num">32</span>
+        </div>
+      </div>
+<div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto28.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-16 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 17 — Cap 18: Uma conversa de futuro
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-17">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Dezoito</span>
+          <p class="chapter-tag">Capítulo 18</p>
+          <h2 class="chapter-title">Uma conversa de futuro</h2>
+          <div class="body-text">
+            <p>No dia seguinte, Gabriel teve uma conversa com o pai. Uma conversa que ele nunca tinha tido daquele jeito.</p>
+            <p>O pai dele falou que ele e a mãe amavam Ana. Disse que ela era diferente. E até falou que ela era bonitinha.</p>
+            <p>Gabriel riu. Porque vindo de pai, até isso virava um momento marcante.</p>
+          </div>
+          <div class="pull-quote">Mas depois a conversa ficou séria.</div>
+          <span class="pg-num">33</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 18 — Uma conversa de futuro</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>O pai disse que Gabriel precisava deixar claro pra Ana. Que, quando chegasse o tempo certo, depois que ela fizesse 18 anos, ele queria começar um namoro com ela. Um namoro cristão. Com propósito. Com Deus no centro.</p>
+            <p>Então Gabriel foi falar com Ana. E dessa vez ele disse com todas as letras o que queria.</p>
+          </div>
+          <div class="pull-quote">Disse que via futuro. Que queria, no tempo certo, viver algo sério com ela. <span class="secret-heart" onclick="openSecret('Eu estou vivendo um sonho, com a melhor pessoa possível')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Não estava no papel. Mas estava no coração. Eles estavam compromissados um com o outro. E ainda brincaram: <em>"falta um ano e dois meses."</em></p>
+          </div>
+          <span class="pg-num">34</span>
+        </div>
+      </div>
+<div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto27.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-17 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 18 — Cap 19: Eu vejo meu futuro com ela
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-18">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Dezenove</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 19</p>
+          <h2 class="chapter-title">Eu vejo meu futuro com ela</h2>
+          <div class="body-text">
+            <p>Eu nunca tinha falado com meu pai daquele jeito. Não sobre isso. Não sobre Ana. Não sobre futuro.</p>
+            <p>Ouvir ele dizendo que ele e minha mãe amavam ela mexeu comigo. Porque não era só coisa da minha cabeça.</p>
+            <p>Meu pai disse que ela era diferente. E eu já sabia. Mas ouvir isso dele fez tudo parecer ainda mais real.</p>
+          </div>
+          <div class="pull-quote">Eu quero ela. Não só agora. Não só por emoção.</div>
+          <span class="pg-num">35</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 19 — Eu vejo meu futuro com ela</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Eu vejo meu futuro com ela. Quero fazer certo. Quero esperar o tempo certo. Quero um namoro cristão. Quero construir algo que agrade a Deus.</p>
+            <p>E quando eu falei isso pra ela, eu tava com medo. Mesmo depois de tudo, eu tava com medo. Mas ela disse que também queria.</p>
+          </div>
+          <div class="pull-quote">A gente não precisava correr. Só precisava continuar. <span class="secret-heart" onclick="openSecret('Com calma. Com verdade. Com Deus. E um com o outro.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Por trás da brincadeira de "falta um ano e dois meses", tinha uma promessa silenciosa.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">36</span>
+        </div>
+      </div>
+          <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto17.jpeg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+
+    </div><!-- /spread-18 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 19 — Cap 20: A primeira que percebeu
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-19">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte</span>
+          <p class="chapter-tag">Capítulo 20 · 7 de junho</p>
+          <h2 class="chapter-title">A primeira que percebeu</h2>
+          <div class="body-text">
+            <p>No domingo, dia 7 de junho, aconteceu outro momento que Gabriel guardaria de um jeito diferente.</p>
+            <p>Naquela tarde, ele estava estranho. Pensativo. Com muita coisa na cabeça. Era algo pessoal. Algo que ele não costumava mostrar pra ninguém.</p>
+            <p>Gabriel sempre foi fechado pra esse tipo de coisa. Ele guardava. Disfarçava. Seguia.</p>
+          </div>
+          <div class="pull-quote">Mas quando chegou na igreja, Ana percebeu. Ela foi a primeira.</div>
+          <span class="pg-num">37</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 20 — A primeira que percebeu</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Antes de qualquer explicação. Antes de qualquer frase. Antes dele dizer que tinha algo errado.</p>
+            <p>Ela percebeu. E isso, pra Gabriel, significou muito.</p>
+            <p>Porque quando alguém percebe o que você tenta esconder, talvez essa pessoa esteja olhando com mais cuidado do que o resto do mundo.</p>
+          </div>
+          <div class="pull-quote">Então ele chamou ela. E contou. <span class="secret-heart" onclick="openSecret('Ela não apressou. Não julgou. Não diminuiu. Só esteve ali. E pra mim, aquilo foi especial.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Não era só sobre contar um problema. Era sobre confiar. Era sobre deixar alguém entrar em uma parte dele que quase ninguém conhecia.</p>
+          </div>
+          <span class="pg-num">38</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-19 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 20 — Cap 21: Eu consegui me abrir
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-20">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e um</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 21</p>
+          <h2 class="chapter-title">Eu consegui me abrir</h2>
+          <div class="body-text">
+            <p>Eu nunca fui bom em falar quando eu tô mal. Eu guardo. Finjo que tá tudo normal. Faço piada. Mudo de assunto. E sigo.</p>
+            <p>Mas naquele dia eu não tava bem. E ela percebeu.</p>
+            <p>Isso me quebrou de um jeito bom. Porque eu tentei disfarçar. Mas ela percebeu mesmo assim.</p>
+          </div>
+          <div class="pull-quote">Se é com ela que eu quero passar o resto da minha vida, eu preciso aprender a me abrir.</div>
+          <span class="pg-num">39</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 21 — Eu consegui me abrir</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Então eu chamei ela. E falei. Do meu jeito. Talvez meio travado. Talvez sem saber explicar direito. Mas falei.</p>
+            <p>E ela me escutou. Só isso já significou muito.</p>
+          </div>
+          <div class="pull-quote">Porque às vezes a gente não precisa de alguém que resolva tudo. Às vezes a gente só precisa de alguém que fique. <span class="secret-heart" onclick="openSecret('Com ela eu consegui ser sincero. Com ela eu consegui mostrar uma parte minha que eu quase nunca mostro.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">E naquele momento, eu tive mais certeza ainda. É ela.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">40</span>
+        </div>
+      </div>
+<div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto26.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-20 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 21 — Cap 22: Pessoalmente
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-21">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e dois</span>
+          <p class="chapter-tag">Capítulo 22 · 7 de junho</p>
+          <h2 class="chapter-title">Pessoalmente</h2>
+          <div class="body-text">
+            <p>Naquele mesmo domingo, aconteceu outra primeira vez.</p>
+            <p>Eles já tinham dito "eu te amo" por mensagem. Na página secreta. Naquela conversa que fez os dois chorarem.</p>
+            <p>Mas agora foi diferente. Porque dessa vez foi pessoalmente.</p>
+          </div>
+          <div class="pull-quote">Olho no olho. Perto. Sem tela no meio.</div>
+          <span class="pg-num">41</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 22 — Pessoalmente</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Porque algumas palavras mudam quando são ditas de perto. Elas deixam de ser só texto. Elas viram voz. Viraram presença. Viraram coragem.</p>
+            <p>O menino que antes mal sabia demonstrar. Que mandava bombom por outra pessoa. Que sentia demais e falava de menos. Que tinha medo de estragar tudo.</p>
+            <p>Agora estava ali. Se abrindo. Falando. Amando com mais coragem.</p>
+          </div>
+          <div class="pull-quote">Naquele dia, Gabriel teve mais certeza. Não uma certeza apressada. Mas uma certeza calma. <span class="secret-heart" onclick="openSecret('Ana, eu não tenho palavras pra te agradecer, obrigado por ser essa pessoa maravilhosa, te amo mto!')">♡</span></div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">42</span>
+        </div>
+      </div>
+<div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto18.jpeg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-21 -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD 22 — Cap 23: Um jogo qualquer
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-22">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e três</span>
+          <p class="chapter-tag">Capítulo 23</p>
+          <h2 class="chapter-title">Um jogo qualquer</h2>
+          <div class="body-text">
+            <p>Alguns dias ficam marcados por acontecimentos enormes. Outros ficam marcados por coisas simples. E, às vezes, são justamente esses que acabam se tornando os mais especiais.</p>
+            <p>Naquela noite, Gabriel e Ana assistiram juntos ao primeiro jogo do Brasil na Copa do Mundo de Clubes. Foi na casa de uma amiga da igreja.</p>
+            <p>Não era um encontro planejado. Não tinha nenhuma grande declaração. Nenhum acontecimento extraordinário.</p>
+          </div>
+          <div class="pull-quote">Mas tinha eles. E isso já bastava.</div>
+          <span class="pg-num">43</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 23 — Um jogo qualquer</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Eles sentaram um ao lado do outro. O jogo acontecia. As pessoas assistiam. Mas, para Gabriel, a melhor parte da noite estava sentada ao seu lado.</p>
+            <p>Teve comemoração de gol. Teve risada. Teve brincadeira. Em algum momento, Ana acreditou que conseguiria bater o recorde de Gabriel no Block Blast. Ela tentou. Tentou de novo. Mas não conseguiu.</p>
+            <p>E isso virou motivo de risada. Mais uma daquelas pequenas disputas que não importavam de verdade. Mas que, por algum motivo, acabavam se tornando lembranças.</p>
+          </div>
+          <div class="pull-quote">Entre um lance e outro, eles tiraram uma foto. A melhor foto deles até aquele momento. <span class="secret-heart" onclick="openSecret('Porque não registrava apenas um momento. Registrava uma fase. Uma fase em que tudo parecia estar florescendo devagar. Do jeito certo. Do jeito que Deus estava escrevendo.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Não importava o que estavam fazendo. O lugar. O evento. Porque, de alguma forma, estar com Ana sempre fazia qualquer momento parecer melhor.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">44</span>
+        </div>
+      </div>
+      <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto19.PNG" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+
+    </div><!-- /spread-22 -->
+
+     <!-- ══════════════════════════════
+     SPREAD 23 — Cap 24: O primeiro abraço
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-23">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e quatro</span>
+          <p class="chapter-tag">Capítulo 24 · 19 de junho</p>
+          <h2 class="chapter-title">O primeiro abraço</h2>
+          <div class="body-text">
+            <p>No dia 19 de junho, Gabriel comemorou seu aniversário com alguns amigos da igreja. O aniversário oficial seria apenas no dia seguinte. Mas aquela noite já seria especial por si só.</p>
+            <p>Tinha comida. Tinha conversa. Tinha amigos. E tinha ela.</p>
+            <p>Quando Ana chegou, cumprimentou todo mundo. Um por um. Até chegar nele.</p>
+          </div>
+          <div class="pull-quote">E então aconteceu algo que Gabriel esperou por muito tempo. Ela o abraçou.</div>
+          <span class="pg-num">45</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 24 — O primeiro abraço</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Não daqueles rápidos que acontecem por educação. Não daqueles que duram apenas um segundo. Um abraço sincero. Um abraço que parecia dizer muito mais do que qualquer frase.</p>
+            <p>E por alguns instantes, Gabriel esqueceu completamente do resto. Esqueceu da comida. Da festa. Dos amigos. Do aniversário.</p>
+          </div>
+          <div class="pull-quote">Porque tudo que conseguiu pensar foi: finalmente. <span class="secret-heart" onclick="openSecret('Foi o melhor presente que eu poderia ter ganhado')">♡</span></div>
+          <div class="body-text">
+            <p>Gabriel fez uma brincadeira — disse que ela não conseguiria comer tudo e acabaria dando o resto para ele. Ana discordou. Mas foi exatamente isso que aconteceu. E os dois riram.</p>
+          </div>
+          <span class="pg-num">46</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto20.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-23 -->
+ 
+ 
+    <!-- ══════════════════════════════
+     SPREAD 24 — Cap 25: O presente que ninguém nunca me deu
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-24">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e cinco</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 25</p>
+          <h2 class="chapter-title">O presente que ninguém nunca me deu</h2>
+          <div class="body-text">
+            <p>Eu achei que sabia qual era o presente. A camisa. E eu já tinha amado aquilo. Mas eu não sabia da carta.</p>
+            <p>Quando finalmente abri, fiquei olhando sem acreditar. Porque não era só uma carta. Era ela. Em cada detalhe.</p>
+            <p>Ela tinha pensado em tudo. Neymar. Carros. Flash. Música. Tocar. Cantar. Coisas que fazem parte de mim. Coisas que ela percebeu.</p>
+          </div>
+          <div class="pull-quote">Significava que ela prestava atenção. Prestava atenção em mim.</div>
+          <span class="pg-num">47</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 25 — O presente que ninguém nunca me deu</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Eu fiquei olhando cada detalhe. Cada desenho. Cada palavra. Tentando entender como alguém conseguiu colocar tanto carinho em um pedaço de papel.</p>
+            <p>E uma frase ficou passando pela minha cabeça: ninguém nunca fez algo assim por mim.</p>
+          </div>
+          <div class="pull-quote">Então fiz o que consegui. Fiquei perto dela. Encostei nela. Deitei no ombro dela. Parecendo um cachorrinho feliz. <span class="secret-heart" onclick="openSecret('Porque talvez eu estivesse mesmo. E naquele momento eu me senti especial. Não por causa do aniversário. Mas porque ela me fez sentir amado de um jeito que eu nunca tinha sentido antes.')">♡</span></div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">48</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto23.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-24 -->
+ 
+ 
+    <!-- ══════════════════════════════
+     SPREAD 25 — Cap 26: Como se ela já fosse da família
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-25">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e seis</span>
+          <p class="chapter-tag">Capítulo 26</p>
+          <h2 class="chapter-title">Como se ela já fosse da família</h2>
+          <div class="body-text">
+            <p>A noite continuou. Assistiram juntos ao jogo do Brasil. Comemoraram os gols. Conversaram durante praticamente toda a partida.</p>
+            <p>Em determinado momento, alguém começou a cantar: <em>"Com quem será que o Gabriel vai casar?"</em></p>
+            <p>E como todo mundo já esperava, falaram o nome de Ana. Mas o que ninguém esperava foi a resposta dela.</p>
+          </div>
+          <div class="dialogue">"Eu aceito."</div>
+          <div class="body-text">
+            <p>A garagem inteira caiu na risada. E Gabriel também. Porque ouvir aquilo parecia um daqueles momentos que só acontecem nos sonhos.</p>
+          </div>
+          <span class="pg-num">49</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 26 — Como se ela já fosse da família</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>O tio de Gabriel resolveu usar um spray de pum perto de onde eles estavam. O cheiro foi tão horrível que ninguém conseguiu ignorar. Todos reclamavam. Todos riam. E João, irmão da Ana, espalhou ainda mais. Ana acabou passando mal e precisou sair para tomar ar.</p>
+            <p>Gabriel ajudou como pôde. Emprestou perfumes. Ficou ao lado dela.</p>
+          </div>
+          <div class="pull-quote">Mas o momento que mais marcou aquela noite aconteceu depois. <span class="secret-heart" onclick="openSecret('Ela começou a conversar com a avó dele. Brincou com seu priminho. Conheceu seu quarto. Ela não parecia uma visita. Parecia alguém que já fazia parte daquela família.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">Observando tudo aquilo, Gabriel percebeu: ela não parecia alguém de fora. Parecia alguém que sempre tivesse estado ali.</p>
+          </div>
+          <span class="pg-num">50</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto21.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-25 -->
+ 
+ 
+    <!-- ══════════════════════════════
+     SPREAD 26 — Cap 27: Um sonho realizado
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-26">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e sete</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 27</p>
+          <h2 class="chapter-title">Um sonho realizado</h2>
+          <div class="body-text">
+            <p>Voltamos para a garagem. E voltamos para o nosso lugar. Um ao lado do outro.</p>
+            <p>Eu até brinquei perguntando se a gente seria daqueles casais que ficam grudados o tempo inteiro. E ela respondeu que provavelmente sim. Porque esperamos muito para viver aquilo.</p>
+            <p>Depois ela pegou meu celular e tentou novamente bater meu recorde no Block Blast. Mais uma tentativa. Mais uma derrota. E eu ri dela.</p>
+          </div>
+          <div class="pull-quote">Fomos jogar Termo. Depois Contexto. Sem perceber o tempo passar.</div>
+          <span class="pg-num">51</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 27 — Um sonho realizado</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Eu deitei no ombro dela. Ela fazia carinho no meu braço. Às vezes segurávamos as mãos um do outro. E tudo parecia se encaixar.</p>
+            <p>Ela até pegou no sono algumas vezes. Eu acabei acordando ela sem querer. Mas continuei ali. Porque eu não queria que aquele momento acabasse.</p>
+          </div>
+          <div class="pull-quote">Eu esperei anos por aquilo. E naquela noite parecia que todo esse tempo tinha valido a pena. <span class="secret-heart" onclick="openSecret('O maior presente daquele aniversário foi perceber que Deus estava realizando um sonho que eu carregava havia anos.')">♡</span></div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">52</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto24.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-26 -->
+ 
+ 
+    <!-- ══════════════════════════════
+     SPREAD 27 — Cap 28: Deus nos usou
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-27">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e oito</span>
+          <p class="chapter-tag">Capítulo 28</p>
+          <h2 class="chapter-title">Deus nos usou</h2>
+          <div class="body-text">
+            <p>No dia seguinte, sábado, aconteceu o culto jovem. E mais uma vez, Gabriel e Ana subiram juntos para cantar.</p>
+            <p>A música era <em>Digno (Worthy)</em>. Ana estava nervosa. Mais nervosa do que costumava demonstrar. Mas Gabriel ficou ao lado dela. Ajudando. Incentivando. Tentando acalmá-la.</p>
+          </div>
+          <div class="pull-quote">Quando a música começou, os dois cantaram juntos. E mais uma vez, suas vozes pareciam se completar.</div>
+          <span class="pg-num">53</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 28 — Deus nos usou</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Gabriel ajudou Ana a entrar na música. A permanecer no tempo. A ganhar confiança. E pouco a pouco o nervosismo foi dando lugar à alegria.</p>
+            <p>Quando tudo terminou, eles ouviram as gravações. Assistiram aos vídeos. As vozes tinham combinado. A música tinha fluído.</p>
+          </div>
+          <div class="pull-quote">E acima de tudo, Deus tinha sido glorificado. <span class="secret-heart" onclick="openSecret('Porque no final das contas, não era sobre eles. Era sobre aquilo que Deus estava fazendo através deles.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">E naquela noite, os dois saíram com a mesma certeza: Deus os tinha usado.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">54</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto22.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-27 -->
+ 
+ 
+    <!-- ══════════════════════════════
+     SPREAD 28 — Cap 29: Agora eles também amam ela
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-28">
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-left">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span class="chapter-num">Vinte e nove</span>
+          <span class="pov">✦ ponto de vista do Gabriel</span>
+          <p class="chapter-tag">Capítulo 29</p>
+          <h2 class="chapter-title">Agora eles também amam ela</h2>
+          <div class="body-text">
+            <p>No domingo eu comemorei com a minha família. E como sempre acontece quando a gente ama alguém, acabei mostrando ela para todo mundo.</p>
+            <p>Mostrei os vídeos dela cantando. Mostrei as fotos. Mostrei a postagem que ela fez para mim à meia-noite.</p>
+            <p>Meu pai e minha mãe já amavam ela. Mas naquele dia percebi que não eram só eles. Era todo mundo. Minha família inteira.</p>
+          </div>
+          <div class="pull-quote">E eu fiquei feliz vendo isso. Porque eu conheço a Ana. Eu sei quem ela é.</div>
+          <span class="pg-num">55</span>
+        </div>
+      </div>
+ 
+      <div class="page-gap"></div>
+ 
+      <div class="chapter-section">
+        <div class="book-page pg-right">
+          <p class="running-head">Capítulo 29 — Agora eles também amam ela</p>
+          <div class="body-text" style="margin-bottom:14px">
+            <p>Eu olhava as reações deles. Os comentários. As brincadeiras. E sorria. Porque parecia mais uma confirmação. Mais um daqueles pequenos detalhes que Deus coloca no caminho.</p>
+          </div>
+          <div class="pull-quote">Eles amam ela pelo mesmo motivo que eu amo. Porque ela é incrível. <span class="secret-heart" onclick="openSecret('E porque, de alguma forma, ela consegue fazer qualquer lugar parecer mais leve simplesmente sendo quem ela é.')">♡</span></div>
+          <div class="body-text">
+            <p style="font-style:italic;opacity:.75">E a cada dia que passa, eu tenho mais certeza de que essa história ainda está só começando.</p>
+          </div>
+          <div class="ornament">✦ ✦ ✦</div>
+          <span class="pg-num">56</span>
+        </div>
+      </div>
+ <div class="polaroid-wrap" style="margin-top:14px">
+            <div class="polaroid sm ts">
+              <div class="photo-img">
+                <img src="fotos/foto25.jpg" alt="2025" onerror="this.style.display='none'" onload="this.style.display='block'">
+                <div class="ph-img"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e"
+                    stroke-width="1">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="12" cy="10" r="3" />
+                    <path d="M3 18l4-4 3 3 4-5 7 6" />
+                  </svg></div>
+              </div>
+              <span class="p-cap">♡</span>
+            </div>
+          </div> 
+    </div><!-- /spread-28 -->
+ 
+
+    <!-- ══════════════════════════════
+     SPREAD VIDEO — Nossas vozes
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-video">
+
+      <div class="chapter-section">
+        <div class="book-page dark" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:36px 24px;">
+
+          <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:260px;height:260px;background:radial-gradient(ellipse,rgba(181,83,74,.15) 0%,transparent 70%);pointer-events:none;"></div>
+
+          <p style="font-family:'Jost',sans-serif;font-weight:300;font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:8px;position:relative;z-index:2;">nosso momento</p>
+
+          <p style="font-family:'Pinyon Script',cursive;font-size:clamp(26px,7vw,36px);color:var(--rose-light);line-height:1.2;text-align:center;margin-bottom:18px;position:relative;z-index:2;">Nossas vozes</p>
+
+          <!-- ══ VÍDEO ══
+               Coloque o vídeo na pasta fotos/ com o nome: video.mp4
+               Dica: comprima o vídeo antes de subir no GitHub.
+               Use https://www.freeconvert.com/video-compressor
+               Qualidade 60-70% já fica ótimo e carrega muito mais rápido. -->
+          <div style="position:relative;z-index:2;width:100%;max-width:195px;margin:0 auto;">
+
+            <!-- moldura polaroid -->
+            <div style="background:#fff9f2;padding:8px 8px 30px;box-shadow:3px 6px 24px rgba(0,0,0,.7),0 0 0 1px rgba(201,166,96,.12);position:relative;">
+
+              <!-- tape -->
+              <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:38px;height:17px;background:rgba(212,174,106,.4);border-radius:1px;"></div>
+
+              <!-- YouTube Shorts embed -->
+              <div id="vid-wrap" style="position:relative;width:100%;padding-bottom:177.78%;background:#0d0604;overflow:hidden;">
+                <iframe
+                  id="yt-player"
+                  src="https://www.youtube.com/embed/M7usthjk6Tw?playsinline=1&rel=0&modestbranding=1&color=white"
+                  style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+
+              <!-- caption polaroid -->
+              <p style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:'Pinyon Script',cursive;font-size:13px;color:#967550;">nossas vozes ♡</p>
+            </div>
+
+          </div>
+
+          <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:clamp(12px,3vw,13px);color:rgba(253,244,231,.4);text-align:center;line-height:1.9;max-width:210px;margin-top:16px;position:relative;z-index:2;">
+            porque quando as vozes combinam,<br>não precisa de mais nenhuma explicação.
+          </p>
+
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right" style="display:flex;flex-direction:column;justify-content:center;padding:48px 28px 56px;">
+          <p class="running-head">Melhor que nos Livros</p>
+          <span style="font-family:'Pinyon Script',cursive;font-size:64px;color:var(--rose-light);opacity:.2;line-height:.9;display:block;margin-bottom:4px;">♪</span>
+          <h2 class="chapter-title" style="margin-bottom:20px;">Digno (Worthy)</h2>
+
+          <div class="body-text">
+            <p>Era culto jovem. Era uma música. Era um sinal feito na hora certa.</p>
+            <p>Mas para Gabriel, era muito mais do que isso. Era a prova de que algumas histórias têm uma trilha sonora própria.</p>
+            <p>Que aparecem nos momentos em que menos se espera. E que ficam para sempre.</p>
+          </div>
+
+          <div class="pull-quote" style="margin-top:18px;">As vozes deles combinaram. E aquilo disse tudo.</div>
+
+          <div class="body-text" style="margin-top:14px;">
+            <p style="font-style:italic;opacity:.6;">Este vídeo é a prova de que aconteceu.</p>
+          </div>
+
+          <div class="ornament" style="margin-top:auto;">✦ ✦ ✦</div>
+          <span class="pg-num">57</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-video -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD QR — Nossa playlist
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-qr">
+
+      <div class="chapter-section">
+        <div class="book-page pg-left"
+          style="display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;padding:40px 28px 56px;">
+          <p class="running-head">Melhor que nos Livros</p>
+          <p class="chapter-tag" style="margin-bottom:12px;">nossa trilha sonora</p>
+          <h2 class="chapter-title" style="padding-left:0;text-align:center;width:100%;margin-bottom:20px;">A Playlist
+          </h2>
+          <p
+            style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink-soft);text-align:center;line-height:2;opacity:.75;margin-bottom:20px;">
+            Tem músicas que a gente ouve<br>e parece que foram feitas<br>pra contar exatamente o que a gente sente.
+          </p>
+          <div class="qr-box" style="background:white;padding:0;border-radius:3px;overflow:hidden;">
+            <a href="https://open.spotify.com/playlist/62MZcJx224ywmhso0c8UpC?si=rWU-wS75QuugKnaTeke95w&pi=pnhX-mF3RG-SG"
+              target="_blank"
+              style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px 28px;text-decoration:none;background:white;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="#1DB954" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="12" fill="#1DB954" />
+                <path
+                  d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.4-.85 13.1 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.3.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.1-.75-.45-.1-.3.1-.65.45-.75 3.8-.85 7.1-.5 9.7 1.1.35.15.4.55.25.85z"
+                  fill="white" />
+              </svg>
+              <span style="font-family:'Marcellus',serif;font-size:13px;color:#1a0f08;letter-spacing:1px;">abrir
+                playlist</span>
+              <span style="font-family:'Pinyon Script',cursive;font-size:18px;color:#a0403a;">nossas músicas ♡</span>
+            </a>
+          </div>
+          <p
+            style="font-family:'Jost',sans-serif;font-size:8px;letter-spacing:2px;color:rgba(61,36,22,0.45);margin-top:12px;text-transform:uppercase;">
+            toca pra abrir no spotify
+          </p>
+          <span class="pg-num">19</span>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page pg-right"
+          style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 28px 56px;">
+          <p class="running-head">Nossa Trilha Sonora</p>
+          <p class="chapter-tag" style="margin-bottom:20px;text-align:center;padding-left:0;">músicas que lembram você
+          </p>
+          <div style="width:100%;padding-left:44px;">
+            <div class="memory-item">
+              <div class="memory-dot" style="background:var(--gold);"></div>
+              <p class="memory-text" style="font-style:italic;">Os que olham para Ti — FHOP</p>
+            </div>
+            <div class="memory-item">
+              <div class="memory-dot" style="background:var(--gold);"></div>
+              <p class="memory-text" style="font-style:italic;">So will i - Hillsong</p>
+            </div>
+            <div class="memory-item">
+              <div class="memory-dot" style="background:var(--gold);"></div>
+              <p class="memory-text" style="font-style:italic;">Dono da minha afeição - FHOP</p>
+            </div>
+             <div class="memory-item">
+              <div class="memory-dot" style="background:var(--gold);"></div>
+              <p class="memory-text" style="font-style:italic;">Digno (Worthy) - Ministério Mergulhar</p>
+            </div>
+          </div>
+          <div class="pull-quote" style="margin-top:24px;width:100%;">
+            Deus é muito bom com a gente, só tenho a agradecer a Ele. <span class="secret-heart"
+              onclick="openSecret('Todas elas estão na nossa playlist!')">♡</span>
+          </div>
+          <div class="rule" style="margin-top:auto;">— ♥ —</div>
+          <span class="pg-num">20</span>
+        </div>
+      </div>
+
+    </div><!-- /spread-qr -->
+
+
+    <!-- ══════════════════════════════
+     SPREAD FINAL
+══════════════════════════════ -->
+    <div class="spread-wrapper" id="spread-final">
+
+      <div class="chapter-section">
+        <div class="book-page dark"
+          style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:400px;padding:40px 24px;">
+
+          <!-- ══ FOTO CONTRACAPA ══ -->
+          <div class="back-polar">
+            <div class="bp-img">
+              <img src="fotos/foto28.jpg" alt="nós" onerror="this.style.display='none'" onload="this.style.display='block'">
+            </div>
+            <span class="bp-cap">para sempre ♡</span>
+          </div>
+
+          <p class="back-text">
+            Eclesiastes 3:1
+          </p>
+        </div>
+      </div>
+
+      <div class="page-gap"></div>
+
+      <div class="chapter-section">
+        <div class="book-page dark"
+          style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:400px;text-align:center;padding:40px 24px;">
+          <p class="final-script">e a história<br>continua…</p>
+          <div class="final-rule"></div>
+          <p class="final-body">
+            Esse livro não é o fim da história.
+            <br>
+            É só a prova de que eu ainda quero escrever muitos capítulos com você.
+          </p>
+          <div class="final-rule"></div>
+          <div class="final-hearts">♥ ♥ ♥</div>
+          <p class="final-label">Melhor que nos Livros</p>
+          <p class="hf-trigger" onclick="revealHidden()" id="hf-trig">· · ·</p>
+        </div>
+      </div>
+
+    </div><!-- /spread-final -->
+
+
+  </div><!-- /#app -->
+
+
+  <!-- ══════════════════════════════
+     NAVIGATION BAR
+══════════════════════════════ -->
+  <nav id="nav-bar">
+    <button class="btn-page" id="btn-prev" disabled>&#8592;</button>
+    <div class="nav-dots" id="nav-dots"></div>
+    <button class="btn-page" id="btn-next">&#8594;</button>
+  </nav>
+
+  <p id="swipe-hint">← deslize para virar →</p>
+
+
+  <script>
+    /* ═══════════════════════ PETALS ═══════════════════════ */
+    (function () {
+      const bg = document.getElementById('petalBg');
+      const symbols = ['✿', '❀', '✾', '❁', '♡', '·'];
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = (Math.random() * 100) + 'vh';
+        p.style.animationDuration = (14 + Math.random() * 20) + 's';
+        p.style.animationDelay = (Math.random() * 18) + 's';
+        p.style.fontSize = (9 + Math.random() * 10) + 'px';
+        bg.appendChild(p);
+      }
+    })();
+
+    /* ═══════════════════════ MUSIC ═══════════════════════ */
+    const musicBtn = document.getElementById('music-btn');
+    let musicPlaying = false;
+
+    // Since we can't host the actual audio file, we link to YouTube
+    function toggleMusic() {
+      if (!musicPlaying) {
+        // Open "Os que olham para Ti" - FHOP on YouTube
+        window.open('https://www.youtube.com/results?search_query=os+que+olham+para+ti+fhop', '_blank');
+        musicBtn.classList.add('playing');
+        musicBtn.textContent = '♫';
+        musicPlaying = true;
+      } else {
+        musicBtn.classList.remove('playing');
+        musicBtn.textContent = '♪';
+        musicPlaying = false;
+      }
+    }
+
+    /* ═══════════════════════ SECRET LETTERS ═══════════════════════ */
+    function openSecret(msg) {
+      document.getElementById('secret-text').textContent = msg;
+      document.getElementById('secret-overlay').classList.add('open');
+    }
+    function closeSecret(e) {
+      if (e.target === document.getElementById('secret-overlay')) {
+        document.getElementById('secret-overlay').classList.remove('open');
+      }
+    }
+    function closeSecretBtn() {
+      document.getElementById('secret-overlay').classList.remove('open');
+    }
+
+    /* ═══════════════════════ HIDDEN FINAL PAGE ═══════════════════════ */
+    function revealHidden() {
+      document.getElementById('hidden-final').classList.add('revealed');
+      document.getElementById('hidden-final').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ═══════════════════════ BOOK ENGINE ═══════════════════════ */
+    const spreads = Array.from(document.querySelectorAll('.spread-wrapper'));
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const dotsWrap = document.getElementById('nav-dots');
+
+    let current = 0;
+    const total = spreads.length;
+
+    /* dots */
+    spreads.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(d);
+    });
+
+    function updateUI() {
+      document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === current));
+      btnPrev.disabled = current === 0;
+      btnNext.disabled = current === total - 1;
+    }
+
+    function goTo(idx, reverse = false) {
+      if (idx < 0 || idx >= total) return;
+      spreads[current].classList.remove('active', 'anim-in', 'anim-rev');
+      current = idx;
+      spreads[current].classList.add('active');
+      spreads[current].classList.add(reverse ? 'anim-rev' : 'anim-in');
+      setTimeout(() => spreads[current].classList.remove('anim-in', 'anim-rev'), 450);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.dispatchEvent(new Event('spreadchange'));
+      updateUI();
+    }
+
+    btnNext.addEventListener('click', () => goTo(current + 1, false));
+    btnPrev.addEventListener('click', () => goTo(current - 1, true));
+
+    /* keyboard */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current - 1, true);
+    });
+
+    /* swipe */
+    let tx = 0, ty = 0;
+    document.addEventListener('touchstart', e => {
+      tx = e.touches[0].clientX;
+      ty = e.touches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      const dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+        if (dx < 0) goTo(current + 1);
+        else goTo(current - 1, true);
+      }
+    }, { passive: true });
+
+    /* image handling */
+   document.querySelectorAll('.photo-img img, .bp-img img, .cp-img img').forEach(img => {
+  img.style.display = 'none';
+  img.addEventListener('error', () => { img.style.display = 'none'; });
+  img.addEventListener('load', () => {
+    img.style.display = 'block';
+    const ph = img.nextElementSibling;
+    if (ph && ph.classList.contains('ph-img')) ph.style.display = 'none';
+  });
+  // se já carregou antes do listener ser adicionado
+  if (img.complete && img.naturalWidth > 0) {
+    img.style.display = 'block';
+    const ph = img.nextElementSibling;
+    if (ph && ph.classList.contains('ph-img')) ph.style.display = 'none';
+  }
+});
+
+    updateUI();
+  </script>
+
+  
+
+</body>
+
+</html>
